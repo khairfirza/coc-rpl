@@ -1,6 +1,5 @@
 const correctCode = "KR2026";
 
-// YouTube autoplay fullscreen embed
 const videoURL = `
 https://www.youtube.com/embed/Qz_YPmpfzjY
 ?autoplay=1
@@ -23,6 +22,7 @@ inputs.forEach((input, index) => {
 
     if (input.value === correctCode[index]) {
       input.classList.add("correct");
+      correctSound.currentTime = 0;
       correctSound.play();
 
       if (index < inputs.length - 1) {
@@ -33,12 +33,14 @@ inputs.forEach((input, index) => {
 
     } else {
       input.classList.add("wrong", "shake");
+      wrongSound.currentTime = 0;
       wrongSound.play();
 
       setTimeout(() => {
         input.classList.remove("wrong", "shake");
         input.value = "";
-      }, 500);
+        input.focus();
+      }, 450);
     }
   });
 });
@@ -46,11 +48,25 @@ inputs.forEach((input, index) => {
 function launchVideo() {
   document.body.innerHTML = `
     <iframe
-      src="${videoURL}"
+      id="videoFrame"
+      src="https://www.youtube.com/embed/Qz_YPmpfzjY?autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1"
       frameborder="0"
       allow="autoplay; fullscreen"
       allowfullscreen
-      style="position:fixed; top:0; left:0; width:100vw; height:100vh;">
+      style="position:fixed; inset:0; width:100vw; height:100vh;">
     </iframe>
   `;
+
+  const iframe = document.getElementById("videoFrame");
+
+  setTimeout(() => {
+    if (iframe.requestFullscreen) {
+      iframe.requestFullscreen();
+    } else if (iframe.webkitRequestFullscreen) {
+      iframe.webkitRequestFullscreen(); // Safari
+    } else if (iframe.msRequestFullscreen) {
+      iframe.msRequestFullscreen(); // IE/Edge
+    }
+  }, 500);
 }
+
