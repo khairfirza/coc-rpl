@@ -1,66 +1,61 @@
 const correctCode = "KR2026";
-const boxes = document.querySelectorAll(".code-boxes input");
-const correctSound = document.getElementById("correctSound");
-const wrongSound = document.getElementById("wrongSound");
+let currentIndex = 0;
 
-let index = 0;
-boxes[0].disabled = false;
-boxes[0].focus();
+const boxes = document.querySelectorAll(".code-box");
+
+const correctSound = new Audio("correct.mp3");
+const wrongSound = new Audio("wrong.mp3");
 
 document.addEventListener("keydown", (e) => {
-  if (index >= boxes.length) return;
+  if (currentIndex >= correctCode.length) return;
 
   const key = e.key.toUpperCase();
-
   if (!/^[A-Z0-9]$/.test(key)) return;
 
-  const currentBox = boxes[index];
-  currentBox.value = key;
+  const currentBox = boxes[currentIndex];
 
-  if (key === correctCode[index]) {
+  if (key === correctCode[currentIndex]) {
+    // CORRECT
+    currentBox.textContent = key;
     currentBox.classList.add("correct");
     correctSound.play();
 
-    index++;
-    if (index < boxes.length) {
-      boxes[index].disabled = false;
-      boxes[index].focus();
-    } else {
+    currentIndex++;
+
+    if (currentIndex === correctCode.length) {
       setTimeout(openVideo, 600);
     }
-
   } else {
+    // WRONG
     wrongSound.play();
-    currentBox.classList.add("wrong", "shake");
+    currentBox.classList.add("wrong");
 
     setTimeout(() => {
-      boxes.forEach(b => {
-        b.value = "";
-        b.classList.remove("correct", "wrong", "shake");
-        b.disabled = true;
-      });
-      index = 0;
-      boxes[0].disabled = false;
-      boxes[0].focus();
-    }, 600);
+      currentBox.classList.remove("wrong");
+      currentBox.textContent = "";
+    }, 500);
   }
 });
 
 function openVideo() {
-  const videoId = "Qz_YPmpfzjY";
-  const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&fs=1&rel=0`;
-
   document.body.innerHTML = `
-    <iframe 
-      src="${url}" 
+    <iframe
+      id="videoFrame"
+      src="https://www.youtube.com/embed/Qz_YPmpfzjY?autoplay=1&controls=0&rel=0&mute=0"
       frameborder="0"
       allow="autoplay; fullscreen"
       allowfullscreen
-      style="position:fixed;top:0;left:0;width:100%;height:100%;">
+      style="position:fixed; inset:0; width:100vw; height:100vh;">
     </iframe>
   `;
 
+  const iframe = document.getElementById("videoFrame");
+
   setTimeout(() => {
-    document.querySelector("iframe").requestFullscreen();
-  }, 1000);
+    if (iframe.requestFullscreen) {
+      iframe.requestFullscreen();
+    } else if (iframe.webkitRequestFullscreen) {
+      iframe.webkitRequestFullscreen();
+    }
+  }, 500);
 }
