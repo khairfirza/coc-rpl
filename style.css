@@ -1,0 +1,69 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at top, #0b1d3a, #020617);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  text-align: center;
+  color: white;
+}
+
+.logo {
+  width: 200px;
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+
+.code-box {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.code-box input {
+  width: 75px;
+  height: 95px;
+  font-size: 48px;
+  text-align: center;
+  border-radius: 12px;
+  border: 3px solid #aaa;
+  background: rgba(255,255,255,0.05);
+  color: white;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.code-box input.correct {
+  border-color: #00ff7f;
+  background: rgba(0, 255, 127, 0.25);
+}
+
+.code-box input.wrong {
+  border-color: red;
+  background: rgba(255, 0, 0, 0.25);
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}
