@@ -1,72 +1,66 @@
 const correctCode = "KR2026";
-
-const videoURL = `
-https://www.youtube.com/embed/Qz_YPmpfzjY
-?autoplay=1
-&mute=0
-&controls=0
-&rel=0
-&modestbranding=1
-&fs=1
-`;
-
-const inputs = document.querySelectorAll(".code-box input");
+const boxes = document.querySelectorAll(".code-boxes input");
 const correctSound = document.getElementById("correctSound");
 const wrongSound = document.getElementById("wrongSound");
 
-inputs[0].focus();
+let index = 0;
+boxes[0].disabled = false;
+boxes[0].focus();
 
-inputs.forEach((input, index) => {
-  input.addEventListener("input", () => {
-    input.value = input.value.toUpperCase();
+document.addEventListener("keydown", (e) => {
+  if (index >= boxes.length) return;
 
-    if (input.value === correctCode[index]) {
-      input.classList.add("correct");
-      correctSound.currentTime = 0;
-      correctSound.play();
+  const key = e.key.toUpperCase();
 
-      if (index < inputs.length - 1) {
-        inputs[index + 1].focus();
-      } else {
-        launchVideo();
-      }
+  if (!/^[A-Z0-9]$/.test(key)) return;
 
+  const currentBox = boxes[index];
+  currentBox.value = key;
+
+  if (key === correctCode[index]) {
+    currentBox.classList.add("correct");
+    correctSound.play();
+
+    index++;
+    if (index < boxes.length) {
+      boxes[index].disabled = false;
+      boxes[index].focus();
     } else {
-      input.classList.add("wrong", "shake");
-      wrongSound.currentTime = 0;
-      wrongSound.play();
-
-      setTimeout(() => {
-        input.classList.remove("wrong", "shake");
-        input.value = "";
-        input.focus();
-      }, 450);
+      setTimeout(openVideo, 600);
     }
-  });
+
+  } else {
+    wrongSound.play();
+    currentBox.classList.add("wrong", "shake");
+
+    setTimeout(() => {
+      boxes.forEach(b => {
+        b.value = "";
+        b.classList.remove("correct", "wrong", "shake");
+        b.disabled = true;
+      });
+      index = 0;
+      boxes[0].disabled = false;
+      boxes[0].focus();
+    }, 600);
+  }
 });
 
-function launchVideo() {
+function openVideo() {
+  const videoId = "Qz_YPmpfzjY";
+  const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&fs=1&rel=0`;
+
   document.body.innerHTML = `
-    <iframe
-      id="videoFrame"
-      src="https://www.youtube.com/embed/Qz_YPmpfzjY?autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1"
+    <iframe 
+      src="${url}" 
       frameborder="0"
       allow="autoplay; fullscreen"
       allowfullscreen
-      style="position:fixed; inset:0; width:100vw; height:100vh;">
+      style="position:fixed;top:0;left:0;width:100%;height:100%;">
     </iframe>
   `;
 
-  const iframe = document.getElementById("videoFrame");
-
   setTimeout(() => {
-    if (iframe.requestFullscreen) {
-      iframe.requestFullscreen();
-    } else if (iframe.webkitRequestFullscreen) {
-      iframe.webkitRequestFullscreen(); // Safari
-    } else if (iframe.msRequestFullscreen) {
-      iframe.msRequestFullscreen(); // IE/Edge
-    }
-  }, 500);
+    document.querySelector("iframe").requestFullscreen();
+  }, 1000);
 }
-
