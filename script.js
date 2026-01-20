@@ -41,7 +41,7 @@ function openVideo() {
   document.body.innerHTML = `
     <iframe
       id="yt"
-      src="https://www.youtube.com/embed/Qz_YPmpfzjY?autoplay=1&controls=0&rel=0&mute=0"
+      src="https://www.youtube.com/embed/AAnsjyAH5e4?autoplay=1&controls=0&rel=0&mute=0"
       allow="autoplay; fullscreen"
       frameborder="0"
       style="position:fixed; inset:0; width:100vw; height:100vh;">
