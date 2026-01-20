@@ -1,86 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Kick Off Meeting Riau Pulp 2026</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>KOM Riau Pulp 2026</title>
 
 <style>
-* { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
-
+* { box-sizing: border-box; }
 body {
   margin: 0;
   height: 100vh;
-  background: radial-gradient(circle at top, #1d2f4a, #070b13);
+  background: radial-gradient(circle at top, #0b1d36, #020b1a);
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: Arial, sans-serif;
+  color: white;
 }
 
 .card {
-  background: #1e2a3b;
-  padding: 40px 45px;
-  border-radius: 22px;
+  background: #16243b;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 420px;
   text-align: center;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.5);
 }
 
 .logo {
   background: white;
-  padding: 15px;
+  padding: 12px;
   border-radius: 12px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .logo img {
-  width: 260px;
-  max-height: 90px;
+  width: 100%;
+  max-height: 80px;
   object-fit: contain;
 }
 
 h2 {
-  color: white;
-  margin-bottom: 30px;
-  letter-spacing: 2px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
 }
 
 .code {
   display: flex;
-  gap: 14px;
-  justify-content: center;
+  justify-content: space-between;
 }
 
-/* WHITE INPUT BOX */
 .code input {
-  width: 70px;
-  height: 90px;
-  font-size: 42px;
+  width: 48px;
+  height: 56px;
+  font-size: 26px;
   text-align: center;
-  border-radius: 12px;
-  border: 2px solid #b0b0b0;
-  background: #ffffff;
-  color: #000000;
+  border-radius: 10px;
+  border: 2px solid #334b70;
+  background: #0e1a2d;
+  color: white;
   outline: none;
 }
 
-/* CORRECT */
 .code input.correct {
-  background: #22c55e;
-  color: #000;
   border-color: #22c55e;
+  background: #14532d;
 }
 
-/* WRONG */
 .code input.wrong {
   border-color: #ef4444;
-  animation: shake 0.35s;
+  animation: shake 0.3s;
 }
 
 @keyframes shake {
   0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
 }
 </style>
@@ -96,12 +92,12 @@ h2 {
   <h2>ENTER THE CODE</h2>
 
   <div class="code">
-    <input maxlength="1" inputmode="text">
-    <input maxlength="1" inputmode="text" disabled>
-    <input maxlength="1" inputmode="text" disabled>
-    <input maxlength="1" inputmode="text" disabled>
-    <input maxlength="1" inputmode="text" disabled>
-    <input maxlength="1" inputmode="text" disabled>
+    <input maxlength="1" inputmode="text" />
+    <input maxlength="1" inputmode="text" disabled />
+    <input maxlength="1" inputmode="text" disabled />
+    <input maxlength="1" inputmode="text" disabled />
+    <input maxlength="1" inputmode="text" disabled />
+    <input maxlength="1" inputmode="text" disabled />
   </div>
 </div>
 
@@ -109,9 +105,7 @@ h2 {
 <audio id="wrongSound" src="wrong.mp3"></audio>
 
 <script>
-const CORRECT_CODE = "KR2026";
-const VIDEO_ID = "Qz_YPmpfzjY";
-
+const answer = "KR2026";
 const inputs = document.querySelectorAll(".code input");
 const correctSound = document.getElementById("correctSound");
 const wrongSound = document.getElementById("wrongSound");
@@ -123,13 +117,16 @@ inputs.forEach((input, index) => {
     const value = input.value.toUpperCase();
     input.value = value;
 
-    if (value === CORRECT_CODE[index]) {
+    if (value === answer[index]) {
       input.classList.add("correct");
       input.disabled = true;
       correctSound.play();
 
-      if (index === CORRECT_CODE.length - 1) {
-        setTimeout(openVideo, 700);
+      if (index === answer.length - 1) {
+        setTimeout(() => {
+          window.location.href =
+            "https://www.youtube.com/embed/Qz_YPmpfzjY?autoplay=1&controls=0";
+        }, 600);
       } else {
         inputs[index + 1].disabled = false;
         inputs[index + 1].focus();
@@ -141,29 +138,10 @@ inputs.forEach((input, index) => {
       setTimeout(() => {
         input.value = "";
         input.classList.remove("wrong");
-      }, 400);
+      }, 300);
     }
   });
 });
-
-function openVideo() {
-  document.body.innerHTML = `
-    <iframe
-      id="yt"
-      src="https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&controls=0&rel=0&mute=0"
-      frameborder="0"
-      allow="autoplay; fullscreen"
-      allowfullscreen
-      style="position:fixed; inset:0; width:100vw; height:100vh;">
-    </iframe>
-  `;
-
-  const iframe = document.getElementById("yt");
-  setTimeout(() => {
-    if (iframe.requestFullscreen) iframe.requestFullscreen();
-    else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
-  }, 500);
-}
 </script>
 
 </body>
